@@ -4,15 +4,17 @@ const app = express();
 
 // app.use(
 //   "/users",
-//   (req, res, next) => {
-//     console.log("1st response log!");
-//     next();
-//   },
-//   (req, res, next) => {
-//     console.log("2nds response log !");
-//     res.send("send 2");
-//     next();
-//   },
+//   [
+//     (req, res, next) => {
+//       console.log("1st response log!");
+//       next();
+//     },
+//     (req, res, next) => {
+//       console.log("2nds response log !");
+//       res.send("send 2");
+//       next();
+//     },
+//   ],
 //   (req, res, next) => {
 //     console.log("3rd response log !");
 //     next();

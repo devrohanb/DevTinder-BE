@@ -1,31 +1,33 @@
 const express = require("express");
-const { authMiddleware } = require("./middlewares/authMiddleware");
+const connectDB = require("./config/database");
+const User = require("./models/user");
 
 const app = express();
 
-app.get("/users", authMiddleware, (req, res) => {
+// TODO: Add sighUp API route
+app.post("/signup", async (req, res) => {
+  const user = new User({
+    firstName: "Rohan",
+    lastName: "Bari",
+    emailId: "rohan.bari@gmail.com",
+    password: "rohan@123",
+    age: "28",
+  });
   try {
-    console.log("Running try block ");
-    throw new Error("asdasdasd");
+    await user.save();
+    res.status(200).send("User added successfully");
   } catch (err) {
+    res.status(400).send("Failed to add a user !", { errMessage: err.message });
+  }
+});
+
+connectDB()
+  .then(() => {
+    console.log("Database connection established.");
+    app.listen(3000, () => {
+      console.log("Server sterted listening on PORT: 3000");
+    });
+  })
+  .catch((err) => {
     console.error({ err });
-    res.status(500).send("Something went wrong !!");
-  }
-});
-
-// NOTE: Generic error
-app.use("/", (err, req, res, next) => {
-  if (err) {
-    res.status(500).send("Something went wrong !");
-  }
-});
-
-// app.get("/user/:userId/:empId", (req, res) => {
-//   console.log(req.query);
-//   console.log(req.params);
-//   res.send({ firstName: "Rohan", lastName: "Bari" }); // Update later
-// });
-
-app.listen(3000, () => {
-  console.log("Server started on PORT: 3000");
-});
+  });

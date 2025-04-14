@@ -1,26 +1,24 @@
 const express = require("express");
+const { authMiddleware } = require("./middlewares/authMiddleware");
 
 const app = express();
 
-// app.use(
-//   "/users",
-//   [
-//     (req, res, next) => {
-//       console.log("1st response log!");
-//       next();
-//     },
-//     (req, res, next) => {
-//       console.log("2nds response log !");
-//       res.send("send 2");
-//       next();
-//     },
-//   ],
-//   (req, res, next) => {
-//     console.log("3rd response log !");
-//     next();
-//     res.send("send 3");
-//   }
-// );
+app.get("/users", authMiddleware, (req, res) => {
+  try {
+    console.log("Running try block ");
+    throw new Error("asdasdasd");
+  } catch (err) {
+    console.error({ err });
+    res.status(500).send("Something went wrong !!");
+  }
+});
+
+// NOTE: Generic error
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    res.status(500).send("Something went wrong !");
+  }
+});
 
 // app.get("/user/:userId/:empId", (req, res) => {
 //   console.log(req.query);
